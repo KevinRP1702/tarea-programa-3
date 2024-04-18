@@ -13,6 +13,8 @@ public class Ventana extends JFrame implements KeyListener {
     private static final long serialVersionUID = 1L;
     private JFrame frame;
     int x = 290, y = 190;
+    Player p1 = new Player(x,y,50,50,"#33FFCA");
+    Player obstaculo = new Player(500,80,50,200,"#FF7133");
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -42,8 +44,11 @@ public class Ventana extends JFrame implements KeyListener {
 			{
 				super.paintComponent(g);
 				Graphics2D pinta = (Graphics2D)g;	
-				pinta.setColor(Color.blue);
-				pinta.fillRect(x,y,50,50);
+				pinta.setColor(Color.decode(p1.getColor()));
+				pinta.fillRect(p1.getX(),p1.getY(),p1.getW(),p1.getH());
+				
+				pinta.setColor(Color.decode(obstaculo.getColor()));
+				pinta.fillRect(obstaculo.getX(),obstaculo.getY(),obstaculo.getW(),obstaculo.getH());
 			}
 		};
         pnlLienzo.setBackground(new Color(128, 128, 192));
@@ -64,6 +69,7 @@ public class Ventana extends JFrame implements KeyListener {
         panel.add(btnReinicio);
 
        frame.addKeyListener(this);
+      
     }
 
     @Override
@@ -75,21 +81,32 @@ public class Ventana extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
         
+        String mov =  p1.colision(obstaculo);
+        System.out.println(mov);
+        
         switch(e.getKeyCode()) {
         case 87:
-        	y -= 10;
+        	if(mov != "Abajo" && mov != "No") {
+        		p1.setY(y -= 10); 
+        	}
         	break;
         	
         case 83:
-        	y += 10;
+        	if(mov != "Arriba") {
+        	p1.setY(y += 10); 
+        	}
         	break;
         	
         case 68:
-        	x += 10;
+        	if(mov != "Izquierda") {
+        	p1.setX(x += 10);
+        	}
         	break;
         	
         case 65:
-        	x -=10;
+        	if(mov != "Derecha") {
+        	p1.setX(x -=10); 
+        	}
         	break;
         	
         default:
